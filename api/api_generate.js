@@ -15,12 +15,12 @@ export default async function handler(req, res) {
       return res.status(500).json({ error: 'Missing OpenAI API key' });
     }
 
-    // هنا بنستخدم API الخاص بـ OpenAI
-    const response = await fetch(''https://api.openai.com/v1/chat/completions', {
+    // هنا بنستخدم API الخاص بـ OpenAI', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${apiKey}`
+    const response = await fetch('aijob-r8ghot1sx-aijobes-projects.vercel.app
       },
       body: JSON.stringify({
         model: 'gpt-3.5-turbo',
