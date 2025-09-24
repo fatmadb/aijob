@@ -1,288 +1,98 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>AI Job Application Tailor</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Job Description Generator</title>
   <style>
-    :root{
-      --bg:#0f1724; --card:#0b1220; --accent:#7c3aed; --accent-2:#06b6d4; --muted:#94a3b8; --glass: rgba(255,255,255,0.03);
-      --radius:12px; --glass-2: rgba(255,255,255,0.02);
-      font-family: Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+    body {
+      font-family: Arial, sans-serif;
+      background: #f9f9f9;
+      margin: 0;
+      padding: 0;
     }
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    body{margin:0;background:linear-gradient(180deg,#071029 0%, #071b2b 100%);color:#e6eef8;min-height:100vh;display:flex;flex-direction:column}
-
-    .container{width:100%;max-width:1100px;margin:28px auto;padding:20px}
-
-    header{display:flex;align-items:center;justify-content:space-between;gap:12px}
-    .brand{display:flex;align-items:center;gap:12px}
-    .logo{width:56px;height:56px;border-radius:12px;background:linear-gradient(135deg,var(--accent),#5b21b6);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:22px}
-    h1{margin:0;font-size:20px}
-    nav{display:flex;gap:8px}
-    .tab{background:transparent;border:1px solid transparent;padding:8px 12px;border-radius:10px;cursor:pointer;color:var(--muted)}
-    .tab.active{background:linear-gradient(90deg,var(--accent),var(--accent-2));color:white;border-color:rgba(255,255,255,0.04)}
-
-    .main{display:grid;grid-template-columns:1fr 340px;gap:18px;margin-top:18px}
-    @media (max-width:980px){.main{grid-template-columns:1fr}}
-
-    .card{background:linear-gradient(180deg,rgba(255,255,255,0.02),transparent);padding:18px;border-radius:var(--radius);box-shadow:0 8px 30px rgba(2,6,23,0.6);backdrop-filter: blur(6px)}
-    label{display:block;font-size:13px;color:var(--muted);margin-bottom:8px}
-    textarea,input,select{width:100%;padding:12px;border-radius:10px;border:1px solid rgba(255,255,255,0.04);background:var(--card);color:inherit;font-size:14px}
-    textarea{min-height:160px;resize:vertical}
-    .row{display:flex;gap:8px}
-    .btn{display:inline-flex;align-items:center;gap:8px;padding:10px 14px;border-radius:10px;border:0;background:linear-gradient(90deg,var(--accent),#5b21b6);color:white;cursor:pointer}
-    .btn.ghost{background:transparent;border:1px solid rgba(255,255,255,0.06)}
-    .btn:disabled{opacity:0.6;cursor:not-allowed}
-    .muted{color:var(--muted);font-size:13px}
-
-    .output-section{margin-top:12px;position:relative}
-    .copy-small{position:absolute;right:8px;top:6px;padding:6px 8px;border-radius:8px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.03);cursor:pointer;font-size:12px}
-    .output{background:var(--glass);padding:12px;border-radius:10px;color:#e6eef8;white-space:pre-wrap;font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, monospace;font-size:13px;min-height:64px}
-
-    .panel-list{display:flex;flex-direction:column;gap:12px}
-    .panel-item{padding:12px;border-radius:10px;background:var(--glass-2);border:1px solid rgba(255,255,255,0.02)}
-
-    .page{display:none}
-    .page.active{display:block}
-
-    footer.app-footer{margin-top:auto;padding:18px 0;background:transparent;color:var(--muted);text-align:center;font-size:13px}
-    footer .links{display:flex;gap:12px;justify-content:center;margin-bottom:8px}
-    footer a{color:var(--muted);text-decoration:none}
-
-    .modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(2,6,23,0.7);z-index:999}
-    .modal.show{display:flex}
-    .modal-card{width:92%;max-width:720px;background:var(--card);padding:16px;border-radius:12px}
+    header {
+      background: #4a90e2;
+      color: #fff;
+      padding: 15px;
+      text-align: center;
+      font-size: 1.4rem;
+    }
+    .container {
+      max-width: 600px;
+      margin: 40px auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    textarea {
+      width: 100%;
+      height: 100px;
+      padding: 10px;
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 1rem;
+    }
+    button {
+      background: #4a90e2;
+      color: #fff;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+    button:hover {
+      background: #357ABD;
+    }
+    .output {
+      margin-top: 20px;
+      padding: 15px;
+      background: #f3f3f3;
+      border-radius: 5px;
+      white-space: pre-wrap;
+    }
+    footer {
+      text-align: center;
+      padding: 20px;
+      font-size: 0.9rem;
+      color: #777;
+    }
   </style>
 </head>
 <body>
+  <header>Job Description Generator</header>
   <div class="container">
-    <header>
-      <div class="brand">
-        <div class="logo">AJ</div>
-        <div>
-          <h1>AI Job Application Tailor</h1>
-          <div class="muted" style="font-size:13px">Generate tailored resume bullets, cover letters & interview questions</div>
-        </div>
-      </div>
-
-      <nav>
-        <button class="tab active" data-page="home">Home</button>
-        <button class="tab" data-page="generate">Generate</button>
-        <button class="tab" data-page="about">About</button>
-      </nav>
-    </header>
-
-    <main class="main">
-      <div>
-        <section id="home" class="page active">
-          <div class="card">
-            <h2 style="margin-top:0">Welcome</h2>
-            <p class="muted">Quickly convert a job posting into resume bullets, a short cover letter and likely interview questions. Use the "Generate" tab when you're ready.</p>
-            <div style="display:flex;gap:8px;margin-top:12px">
-              <button class="btn" data-goto="generate">Start generating</button>
-              <button class="btn ghost" data-goto="about">Learn more</button>
-            </div>
-          </div>
-
-          <div style="height:12px"></div>
-
-          <div class="card">
-            <h3 style="margin-top:0">How it helps</h3>
-            <ul style="padding-left:18px;color:var(--muted)">
-              <li>Produce concise, role-tailored resume bullets in seconds.</li>
-              <li>Get a ready-to-send cover letter tuned to the job ad.</li>
-              <li>Practice with predicted interview questions.</li>
-            </ul>
-          </div>
-        </section>
-
-        <section id="generate" class="page">
-          <div class="card">
-            <label for="jobtext">Job posting text or URL</label>
-            <textarea id="jobtext" placeholder="Paste the job description, or copy a LinkedIn posting here..."></textarea>
-
-            <div style="display:flex;gap:8px;margin-top:10px;align-items:center">
-              <div style="flex:1">
-                <label for="role">Target role / your title</label>
-                <input id="role" placeholder="e.g. Frontend Engineer" />
-              </div>
-              <div style="width:140px">
-                <label for="tone">Tone</label>
-                <select id="tone">
-                  <option>Professional</option>
-                  <option>Friendly</option>
-                  <option>Concise</option>
-                  <option>Confident</option>
-                </select>
-              </div>
-            </div>
-
-            <div style="display:flex;gap:8px;margin-top:12px;align-items:center">
-              <button id="generateBtn" class="btn">Generate</button>
-              <button id="clearBtn" class="btn ghost">Clear</button>
-              <div style="margin-left:auto" class="muted">Demo mode available</div>
-            </div>
-
-            <div class="output-section">
-              <label>Resume Bullets</label>
-              <button class="copy-small" data-target="bullets">Copy</button>
-              <div id="bullets" class="output">—</div>
-            </div>
-            <div class="output-section">
-              <label>Cover Letter</label>
-              <button class="copy-small" data-target="cover">Copy</button>
-              <div id="cover" class="output">—</div>
-            </div>
-            <div class="output-section">
-              <label>Interview Questions (predicted)</label>
-              <button class="copy-small" data-target="questions">Copy</button>
-              <div id="questions" class="output">—</div>
-            </div>
-
-            <div style="display:flex;gap:8px;margin-top:12px">
-              <button id="copyAllBtn" class="btn">Copy All</button>
-              <button id="downloadBtn" class="btn ghost">Download .txt</button>
-            </div>
-          </div>
-        </section>
-
-        <section id="about" class="page">
-          <div class="card">
-            <h2 style="margin-top:0">About</h2>
-            <p class="muted">AI Job Application Tailor is a lightweight single-file prototype meant for rapid testing and productization. It generates tailored application content from job postings.</p>
-            <p class="muted">For production, keep API keys on a server (not in client code). If you want, I can provide a small server proxy example.</p>
-          </div>
-        </section>
-      </div>
-
-      <aside>
-        <div class="panel-list">
-          <div class="panel-item card">
-            <strong>Export</strong>
-            <p class="muted" style="margin:6px 0 0">Use Copy or Download if clipboard access is restricted by the host environment.</p>
-          </div>
-
-          <div class="panel-item card">
-            <strong>Privacy</strong>
-            <p class="muted" style="margin:6px 0 0">This demo stores nothing. For live use, implement a server-side proxy to keep your API key secret.</p>
-          </div>
-        </div>
-      </aside>
-    </main>
-
-    <footer class="app-footer">
-      <div class="links">
-        <a href="#" id="footer-home">Home</a>
-        <a href="#" id="footer-generate">Generate</a>
-        <a href="#" id="footer-about">About</a>
-      </div>
-      <div>&copy; 2025 AI Job Application Tailor — Built by You</div>
-    </footer>
+    <label for="role">Enter job role / description:</label>
+    <textarea id="role" placeholder="e.g. Marketing Manager in a SaaS company"></textarea>
+    <button onclick="generate()">Generate</button>
+    <div class="output" id="output"></div>
   </div>
+  <footer>© 2025 Job Description Generator</footer>
 
-  <div id="manualModal" class="modal" role="dialog" aria-modal="true">
-    <div class="modal-card">
-      <h3 style="margin-top:0">Copy failed — manual fallback</h3>
-      <p class="muted">Your browser or the current page blocked programmatic clipboard access. Please select the text below and press <strong>Ctrl/Cmd + C</strong> to copy, or use the Download button.</p>
-      <textarea id="manualArea" style="width:100%;height:200px;border-radius:8px;padding:10px;margin-top:8px"></textarea>
-      <div style="display:flex;gap:8px;margin-top:10px;justify-content:flex-end">
-        <button id="manualSelect" class="btn ghost">Select all</button>
-        <button id="manualClose" class="btn">Close</button>
-      </div>
-    </div>
-  </div>
-
-<script>
-const OPENAI_API_KEY = 'YOUR_API_KEY_HERE';
-const OPENAI_ENDPOINT = 'https://api.openai.com/v1/chat/completions';
-const MODEL = 'gpt-4o-mini';
-
-const tabs = Array.from(document.querySelectorAll('.tab'));
-const pages = Array.from(document.querySelectorAll('.page'));
-const gotoButtons = Array.from(document.querySelectorAll('[data-goto]'));
-const jobtext = document.getElementById('jobtext');
-const role = document.getElementById('role');
-const tone = document.getElementById('tone');
-const generateBtn = document.getElementById('generateBtn');
-const clearBtn = document.getElementById('clearBtn');
-const bulletsOut = document.getElementById('bullets');
-const coverOut = document.getElementById('cover');
-const questionsOut = document.getElementById('questions');
-const copyAllBtn = document.getElementById('copyAllBtn');
-const downloadBtn = document.getElementById('downloadBtn');
-const manualModal = document.getElementById('manualModal');
-const manualArea = document.getElementById('manualArea');
-const manualSelect = document.getElementById('manualSelect');
-const manualClose = document.getElementById('manualClose');
-const smallCopyButtons = Array.from(document.querySelectorAll('.copy-small'));
-
-const DEMO = {
-  bullets: `- Built and optimized modular React components used by 200k+ users, improving load time by 35%\n- Led cross-functional shipping of feature X with backend and design teams\n- Implemented TypeScript types and unit tests increasing code reliability`,
-  cover: `Hello Hiring Team,\n\nI am excited to apply for the Frontend Engineer role. With 6 years building performant React applications and a focus on accessible UI, I bring hands-on experience shipping user-first features and collaborating with design and backend teams. I would love to bring my expertise to your team to improve component quality and user performance.\n\nSincerely,\nYour Name`,
-  questions: `1) How do you measure frontend performance and what metrics do you track?\n2) Describe a time you improved accessibility in a product.\n3) How do you approach testing for complex UI components.`
-};
-
-function activatePage(id){
-  pages.forEach(p=>p.classList.toggle('active', p.id===id));
-  tabs.forEach(t=>t.classList.toggle('active', t.getAttribute('data-page')===id));
-}
-
-tabs.forEach(t=>t.addEventListener('click', ()=>activatePage(t.getAttribute('data-page'))));
-gotoButtons.forEach(b=>b.addEventListener('click', ()=>activatePage(b.getAttribute('data-goto'))));
-
-function setLoading(is){
-  generateBtn.disabled = is;
-  generateBtn.textContent = is ? 'Generating…' : 'Generate';
-}
-
-async function callOpenAI(prompt){
-  const body = {
-    model: MODEL,
-    messages: [
-      {role:'system', content: 'You are a helpful assistant that rewrites job ads into resume bullets, a short cover letter, and predicted interview questions.'},
-      {role:'user', content: prompt}
-    ],
-    temperature:0.3,
-    max_tokens:800
-  };
-
-  const resp = await fetch(OPENAI_ENDPOINT, {
-    method:'POST',
-    headers:{
-      'Content-Type':'application/json',
-      'Authorization': `Bearer ${OPENAI_API_KEY}`
-    },
-    body: JSON.stringify(body)
-  });
-  if(!resp.ok){
-    const txt = await resp.text();
-    throw new Error('API error: ' + resp.status + ' / ' + txt);
-  }
-  const data = await resp.json();
-  return (data.choices && data.choices[0] && data.choices[0].message && data.choices[0].message.content) || '';
-}
-
-function splitSections(aiText){
-  const parts = aiText.split(/\n\n+/).map(s=>s.trim()).filter(Boolean);
-  return {
-    bullets: parts[0] || aiText,
-    cover: parts[1] || '',
-    questions: parts.slice(2).join('\n\n') || ''
-  };
-}
-
-async function generate(){
-  const text = jobtext.value.trim();
-  if(!text){alert('Please paste a job description or URL.');return}
-  setLoading(true);
-
-  const prompt = `Job posting:\n\n${text}\n\nYour tasks:\n1) Produce 5-8 concise resume bullet points tailored to the job and role (${role.value || 'Candidate'})\n2) Produce a 200-280 word cover letter in a ${tone.value.toLowerCase()} tone that references key job requirements\n3) List 6 likely interview questions the candidate should prepare for\n\nSeparate each section with a clear blank line.`;
-
-  try{
-    let aiText = '';
-    if(OPENAI_API_KEY === 'YOUR_API_KEY_HERE'){
-      aiText = `- ${DEMO.bullets}\n\n${DEMO.cover}\n\n${DEMO.questions}`;
-    } else {
-      aiText = await
+  <script>
+    async function generate() {
+      const role = document.getElementById('role').value.trim();
+      if (!role) {
+        alert('Please enter a role or description');
+        return;
+      }
+      document.getElementById('output').textContent = 'Generating...';
+      try {
+        const response = await fetch('/api/generate', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ role })
+        });
+        const data = await response.json();
+        document.getElementById('output').textContent = data.result || 'No output';
+      } catch (err) {
+        console.error(err);
+        document.getElementById('output').textContent = 'Error generating description';
+      }
+    }
+  </script>
+</body>
+</html>
