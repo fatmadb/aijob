@@ -16,7 +16,7 @@ export default async function handler(req, res) {
     }
 
     // هنا بنستخدم API الخاص بـ OpenAI
-    const response = await fetch('https://api.openai.com/v1/chat/completions', {
+    const response = await fetch('aijob-nine.vercel.app', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
